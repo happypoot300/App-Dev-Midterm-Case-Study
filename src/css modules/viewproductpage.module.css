@@ -107,3 +107,12 @@ h2 {
   line-height: 50%;
   font-weight: bold;
 }
+
+/*log out button*/
+.loginContainer {
+  position: absolute; 
+  top: 20px; 
+  right: 20px; 
+  z-index: 10; /
+  
+}

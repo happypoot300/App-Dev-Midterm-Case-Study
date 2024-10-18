@@ -1,11 +1,11 @@
-import { NavLink } from "react-router-dom";
-//bootstrap
+import { NavLink, Link } from "react-router-dom";
+// Bootstrap
 import Button from "../components/Button.jsx";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-//components
+// Components
 import Table from "../components/Table.jsx";
-//css style
+// CSS style
 import Style from "../css modules/viewproductpage.module.css";
 
 export default function ViewProductPage() {
@@ -27,6 +27,12 @@ export default function ViewProductPage() {
         </div>
         <h2>All Tasks</h2>
 
+        <div className={Style.loginContainer}>
+          <Link to="/login" className={`${Style.addButton}`}> 
+            Log out
+          </Link>
+        </div>
+
         <div className={Style.tableContainer}>
           <div className={Style.buttonContainer}>
             <Button
@@ -36,13 +42,11 @@ export default function ViewProductPage() {
               {...buttonProps}
             ></Button>
             <div className={Style.searchContainer}>
-              <InputGroup>
-                <Form.Control
-                  className={Style.searchInput}
-                  placeholder="Search"
-                />
-                <Button className={Style.searchButton} name={"SEARCH"}></Button>
-              </InputGroup>
+              <Form.Control
+                className={Style.searchInput}
+                placeholder="Search"
+              />
+              <Button className={Style.searchButton} name={"SEARCH"}></Button>
             </div>
           </div>
 
