@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button.jsx";
+import Button from "../components/Button.jsx"; // Custom Button component
 import Form from "react-bootstrap/Form";
 import Style from "../css modules/addproduct.module.css";
 import ViewProductPage from "./ViewProductPage.jsx";
+
 
 export default function AddProductPage() {
   const [formData, setFormData] = useState({
@@ -41,7 +42,6 @@ export default function AddProductPage() {
       .then((data) => {
         console.log("Success:", data);
         setFormSubmitted(true);
-        // You can reset the form or display a success message here
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -92,12 +92,22 @@ export default function AddProductPage() {
         <Form.Group controlId="formCategory">
           <Form.Label>Category</Form.Label>
           <Form.Control
-            type="text"
+            as="select"
             name="category"
             value={formData.category}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="">Select a Category</option>
+            <option value="automotive">Automotive</option>
+            <option value="beauty and personal care">Beauty and Personal Care</option>
+            <option value="electronics">Electronics</option>
+            <option value="fashion">Fashion</option>
+            <option value="health and fitness">Health and Fitness</option>
+            <option value="home and kitchen">Home and Kitchen</option>
+            <option value="sports & outdoors">Sports & Outdoors</option>
+            <option value="toys & games">Toys & Games</option>
+          </Form.Control>
         </Form.Group>
 
         <Form.Group controlId="formBarcode">
@@ -122,7 +132,10 @@ export default function AddProductPage() {
           />
         </Form.Group>
 
-        <Button type="submit" name={"ADD PRODUCT"} />
+      
+        <Button type="submit" name="Add Product" />
+
+      
       </Form>
     </div>
   );
