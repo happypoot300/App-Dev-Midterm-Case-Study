@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 //bootstrap
 import Button from "../components/Button.jsx";
@@ -8,6 +8,7 @@ import Container from "react-bootstrap/Container";
 //components
 import Table from "../components/Table.jsx";
 import AddProductPage from "./AddProductPage.jsx";
+import EditProductPage from "./EditProductPage.jsx";
 //css style
 import Style from "../css modules/viewproductpage.module.css";
 //fontawesome
@@ -15,7 +16,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function ViewProductPage() {
-  const [addbutton, setAddButton] = useState(false);
+  const [addButton, setAddButton] = useState(false);
+  const [editButton, setEditButton] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
@@ -30,16 +32,22 @@ export default function ViewProductPage() {
   }, []);
   //end
 
+  function updateProductsList() {
+    fetch("http://127.0.0.1:8000/api/products")
+      .then((response) => response.json())
+      .then((products) => {
+        setProducts(products);
+        setSearchResults([]);
+      })
+      .catch((error) => console.error("Error fetching data", error));
+  }
+
   function handleSearchQuery() {
     const filteredProducts = products.filter((product) => {
       const searchQueryLower = searchQuery.toLowerCase();
       return product.product_name.toLowerCase().includes(searchQueryLower);
     });
     setSearchResults(filteredProducts);
-  }
-
-  if (addbutton) {
-    return <AddProductPage />;
   }
 
   return (
@@ -64,11 +72,13 @@ export default function ViewProductPage() {
         <Container fluid>
           <div className={Style.tableContainer}>
             <div className={Style.buttonContainer}>
-              <Button
-                className={Style.addButton}
-                name={"+ ADD PRODUCT"}
-                onClick={() => setAddButton(true)}
-              ></Button>
+              <Link to="/addProductPage">
+                <Button
+                  className={Style.addButton}
+                  name={"+ ADD PRODUCT"}
+                  onClick={() => setAddButton(true)}
+                ></Button>
+              </Link>
               <div className={Style.searchContainer}>
                 <InputGroup>
                   <Form.Control
@@ -89,6 +99,7 @@ export default function ViewProductPage() {
             </div>
             <Table
               products={searchResults.length > 0 ? searchResults : products}
+              updateProductsList={updateProductsList}
             />
           </div>
         </Container>

@@ -24,3 +24,10 @@ label {
 .deleteButton {
   color: #2cb37e;
 }
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+}
