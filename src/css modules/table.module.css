@@ -1,0 +1,26 @@
+.filterContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+label {
+  font-size: 15px;
+}
+
+.filterIcon {
+  color: var(--cornFlowerBlue);
+  padding-left: 5px;
+}
+
+.filterIcon:hover {
+  cursor: pointer;
+}
+
+.editButton {
+  color: #ec4547;
+}
+
+.deleteButton {
+  color: #2cb37e;
+}
