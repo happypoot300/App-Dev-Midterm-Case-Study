@@ -5,13 +5,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ViewProductPage from "./pages/ViewProductPage";
 import AddProductPage from "./pages/AddProductPage";
 import EditProductPage from "./pages/EditProductPage";
+import LoginPage from "./pages/LoginPage";
 //components
 
 export default function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<ViewProductPage />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/ViewProductPage" element={<ViewProductPage />} />
         <Route path="/addProductPage" element={<AddProductPage />} />
         <Route path="/editProductPage/:id" element={<EditProductPage />} />
       </Routes>

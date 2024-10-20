@@ -5,6 +5,7 @@ import Button from "../components/Button.jsx";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
+import Dropdown from "react-bootstrap/Dropdown";
 //components
 import Table from "../components/Table.jsx";
 import AddProductPage from "./AddProductPage.jsx";
@@ -58,15 +59,26 @@ export default function ViewProductPage() {
             <h1>E-Com Product Management</h1>
             <div className={Style.header__imgIcon}></div>
           </div>
-          <div className={Style.header__userIcon}>
-            <div className={Style.iconBorder}>
+
+          <Dropdown className={Style.header__userIcon}>
+            <Dropdown.Toggle
+              className={Style.iconBorder}
+              variant="link"
+              id="dropdown-basic"
+            >
               <FontAwesomeIcon
                 icon={faUser}
-                size="xl"
+                size="lg"
                 style={{ color: "4470FE" }}
               />
-            </div>
-          </div>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Link to="/" className="dropdown-item text-center">
+                Log Out
+              </Link>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         <h2>Product List</h2>
         <Container fluid>

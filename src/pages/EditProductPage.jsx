@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Container } from "react-bootstrap";
 import ViewProductPage from "./ViewProductPage.jsx";
+import Style from "../css modules/editproduct.module.css";
 
 export default function EditProductPage() {
+  const navigate = useNavigate();
   const { id } = useParams();
   console.log("ID: ", id);
 
@@ -51,68 +53,91 @@ export default function EditProductPage() {
   }
 
   if (isFormSubmitted) {
-    return <ViewProductPage />;
+    navigate("/viewProductPage");
   }
 
   return (
-    <Container fluid className="p-0 m-0">
-      <h2>Edit Product</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formBarcode">
-          <Form.Label>Barcode</Form.Label>
-          <Form.Control
-            type="text"
-            name="barcode"
-            value={formData.bar_code}
-            onChange={handleChange}
-            readOnly // Disable editing for the barcode field
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formDescription">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formPrice">
-          <Form.Label>Price</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formQuantity">
-          <Form.Label>Quantity</Form.Label>
-          <Form.Control
-            type="number"
-            name="stock Quantity"
-            value={formData.stock_quantity}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formCategory">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Update Product
-        </Button>
-      </Form>
+    <Container fluid className="pt-5 m-0">
+      <div className={Style.editProductContainer}>
+        <h2>Add New Product</h2>
+        <Form clasName={Style.form} onSubmit={handleSubmit}>
+          <Form.Group controlId="formProductName">
+            <Form.Label>Product Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="product_name"
+              value={formData.product_name}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formPrice">
+            <Form.Label>Price</Form.Label>
+            <Form.Control
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formDescription">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formCategory">
+            <Form.Label>Category</Form.Label>
+            <Form.Control
+              as="select"
+              name="category"
+              defaultValue={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select a Category</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Beauty and Personal Care">
+                Beauty and Personal Care
+              </option>
+              <option value="Electronics">Electronics</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Health and Fitness">Health and Fitness</option>
+              <option value="Home and Kitchen">Home and Kitchen</option>
+              <option value="Sports & Outdoors">Sports & Outdoors</option>
+              <option value="Toys & Games">Toys & Games</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="formBarcode">
+            <Form.Label>Barcode</Form.Label>
+            <Form.Control
+              type="text"
+              name="bar_code"
+              value={formData.bar_code}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formQuantity">
+            <Form.Label>Stock Quantity</Form.Label>
+            <Form.Control
+              type="number"
+              name="stock_quantity"
+              value={formData.stock_quantity}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Button className={Style.button} type="submit">
+            EDIT PRODUCT
+          </Button>
+        </Form>
+      </div>
     </Container>
   );
 }

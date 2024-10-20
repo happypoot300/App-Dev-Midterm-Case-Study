@@ -50,11 +50,11 @@ header {
 }
 
 .header__userIcon {
-  padding: 10px 10px 0px 0px;
+  padding: 5px 15px 0px 0px;
 }
 
 .iconBorder {
-  padding: 6px 8px 6px 8px;
+  padding: 8px 3px 10px 13px;
   border: 2px solid var(--neonBlue);
   border-radius: 100%;
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button.jsx";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
@@ -7,6 +7,7 @@ import Style from "../css modules/addproduct.module.css";
 import ViewProductPage from "./ViewProductPage.jsx";
 
 export default function AddProductPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     product_name: "",
     price: "",
@@ -48,7 +49,7 @@ export default function AddProductPage() {
   }
 
   if (isFormSubmitted) {
-    return <ViewProductPage />;
+    return navigate("/viewProductPage");
   }
 
   return (
