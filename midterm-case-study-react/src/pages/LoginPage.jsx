@@ -53,7 +53,10 @@ export default function LoginPage() {
               className="form-control"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError(''); // Reset error when email changes
+              }}
               required
             />
           </div>
@@ -66,7 +69,10 @@ export default function LoginPage() {
               className="form-control"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(''); // Reset error when password changes
+              }}
               required
             />
           </div>
