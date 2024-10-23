@@ -6,6 +6,7 @@ import ViewProductPage from "./pages/ViewProductPage";
 import AddProductPage from "./pages/AddProductPage";
 import EditProductPage from "./pages/EditProductPage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 //components
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/ViewProductPage" element={<ViewProductPage />} />
         <Route path="/addProductPage" element={<AddProductPage />} />
         <Route path="/editProductPage/:id" element={<EditProductPage />} />
+        <Route path="/registerPage" element={<RegisterPage />} />
       </Routes>
     </div>
   );

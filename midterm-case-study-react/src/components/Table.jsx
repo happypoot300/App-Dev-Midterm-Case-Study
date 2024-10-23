@@ -13,6 +13,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ViewProductPage from "../pages/ViewProductPage";
+import Barcode from "barcodejs";
 
 export default function ViewTable(props) {
   console.log("ViewTable re-rendered");
@@ -23,6 +24,35 @@ export default function ViewTable(props) {
     fetch(`http://127.0.0.1:8000/api/products/${id}`, { method: "DELETE" })
       .then((response) => response.ok && props.updateProductsList())
       .catch((error) => console.error("Error deleting product:", error));
+  }
+
+  function generateBarcode(barcodeValue) {
+    const svg = document.getElementById(`barcode-${barcodeValue}`);
+    if (svg) {
+      svg.remove();
+    }
+    const barcode = new Barcode(`#${barcodeValue}`, {
+      lineColor: "#000",
+      width: 2,
+      height: 30,
+      displayValue: false,
+      fontOptions: "",
+      font: "monospace",
+      textAlign: "center",
+      textPosition: "bottom",
+      textMargin: 2,
+      fontSize: 14,
+      background: "#ffffff",
+      margin: 0,
+      marginTop: 0,
+      marginBottom: 0,
+      marginLeft: 0,
+      marginRight: 0,
+      valid: function (valid) {
+        console.log("Barcode valid:", valid);
+      },
+    });
+    barcode.code11(barcodeValue);
   }
 
   return (

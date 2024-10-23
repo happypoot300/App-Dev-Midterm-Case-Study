@@ -1,31 +1,35 @@
 import React, { useState } from "react";
 // CSS style
 import Style from "../css modules/loginpage.module.css";
-import { useNavigate } from "react-router-dom";
+import { Container, Button } from "react-bootstrap";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "../api/axios";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const hardcodedUser = {
-      username: "1@example.com", //ussername of login
-      password: "123", //password of login
-    };
 
-    if (
-      username === hardcodedUser.username &&
-      password === hardcodedUser.password
-    ) {
-      console.log("Login successful!");
+    try {
+      const response = await axios.post("/login", { email, password });
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      setEmail("");
+      setPassword("");
       navigate("/ViewProductPage");
-    } else {
+    } catch (error) {
+      console.log(error);
       setError("Invalid username or password");
     }
   };
+
+  function handleRegister() {
+    navigate("/registerPage");
+  }
 
   return (
     <div className={Style.loginContainer}>
@@ -34,15 +38,15 @@ export default function LoginPage() {
         {error && <p className={Style.textDanger}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="username" className="form-label">
+            <label htmlFor="email" className="form-label">
               Email:
             </label>
             <input
               type="text"
               className="form-control"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -59,9 +63,14 @@ export default function LoginPage() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            Log In
-          </button>
+          <Container className="d-flex flex-column m-0 p-0">
+            <button type="submit" className="btn btn-primary">
+              Log In
+            </button>
+            <Button variant="link" onClick={handleRegister} className="mt-2">
+              Register
+            </Button>
+          </Container>
         </form>
       </div>
     </div>
