@@ -1,16 +1,4 @@
-CREATE TABLE products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name VARCHAR(100) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    description TEXT,
-    category VARCHAR(50),
-    bar_code VARCHAR(50) UNIQUE,
-    stock_quantity INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-INSERT INTO products (product_name, price, description, category, bar_code, stock_quantity)
+INSERT INTO product_lists (product_name, price, description, category, bar_code, stock_quantity)
 VALUES 
     ('Engine Oil', 3000.00, 'Synthetic motor oil for high performance', 'automotive', '9012345678901', 80),
     ('Smartphone', 5699.00, 'Latest model smartphone with 128GB storage', 'electronics', '1123456789013', 30),
