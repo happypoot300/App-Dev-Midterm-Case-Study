@@ -2,57 +2,37 @@
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import Dropdown from "react-bootstrap/Dropdown";
 //css style
 import Style from "../css modules/table.module.css";
 //fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFilter,
+  faTrash,
+  faArrowUp,
+  faArrowDown,
+  faPenToSquare,
+  faPesoSign,
+} from "@fortawesome/free-solid-svg-icons";
 //react
-import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import ViewProductPage from "../pages/ViewProductPage";
-import Barcode from "barcodejs";
+//barcode
+import BarcodeGenerator from "./BarcodeGenerator";
 
 export default function ViewTable(props) {
   console.log("ViewTable re-rendered");
 
   const frenchGray = "#d0d5db";
+  const pesoSign = {
+    peso: <FontAwesomeIcon icon={faPesoSign} />,
+  };
 
   function handleDelete(id) {
+    console.log("handleDelete called with id:", id);
     fetch(`http://127.0.0.1:8000/api/products/${id}`, { method: "DELETE" })
-      .then((response) => response.ok && props.updateProductsList())
+      .then(() => props.updateProductsList())
       .catch((error) => console.error("Error deleting product:", error));
-  }
-
-  function generateBarcode(barcodeValue) {
-    const svg = document.getElementById(`barcode-${barcodeValue}`);
-    if (svg) {
-      svg.remove();
-    }
-    const barcode = new Barcode(`#${barcodeValue}`, {
-      lineColor: "#000",
-      width: 2,
-      height: 30,
-      displayValue: false,
-      fontOptions: "",
-      font: "monospace",
-      textAlign: "center",
-      textPosition: "bottom",
-      textMargin: 2,
-      fontSize: 14,
-      background: "#ffffff",
-      margin: 0,
-      marginTop: 0,
-      marginBottom: 0,
-      marginLeft: 0,
-      marginRight: 0,
-      valid: function (valid) {
-        console.log("Barcode valid:", valid);
-      },
-    });
-    barcode.code11(barcodeValue);
   }
 
   return (
@@ -63,11 +43,41 @@ export default function ViewTable(props) {
             <th style={{ backgroundColor: frenchGray }}>
               <div className={Style.filterContainer}>
                 <label className="text-nowrap">Product Name</label>
-                <FontAwesomeIcon
-                  className={Style.filterIcon}
-                  size="lg"
-                  icon={faFilter}
-                />
+                <Dropdown align="end">
+                  <Dropdown.Toggle variant="link" id="dropdown-basic">
+                    <FontAwesomeIcon
+                      className={Style.filterIcon}
+                      icon={faFilter}
+                      size="lg"
+                      style={{ color: "4470FE" }}
+                    />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="text-center m-0 p-0">
+                    <Dropdown.Item
+                      className="m-0 p-0"
+                      onClick={() => props.updateDefaultTable()}
+                    >
+                      <p>-- Default --</p>
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 p-0"
+                      onClick={() =>
+                        props.sortProductsOrder("product_name", "asc")
+                      }
+                    >
+                      <p>A-Z</p>
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 p-0"
+                      onClick={() =>
+                        props.sortProductsOrder("product_name", "desc")
+                      }
+                    >
+                      <p>Z-A</p>
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </th>
             <br />
@@ -75,50 +85,204 @@ export default function ViewTable(props) {
             <th style={{ backgroundColor: frenchGray }}>
               <div className={Style.filterContainer}>
                 <label className="text-nowrap">Price</label>
-                <FontAwesomeIcon
-                  className={Style.filterIcon}
-                  size="lg"
-                  icon={faFilter}
-                />
+                <Dropdown align="end">
+                  <Dropdown.Toggle variant="link" id="dropdown-basic">
+                    <FontAwesomeIcon
+                      className={Style.filterIcon}
+                      icon={faFilter}
+                      size="lg"
+                      style={{ color: "4470FE" }}
+                    />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="text-center m-0 p-0">
+                    <Dropdown.Item
+                      className="d-flex justify-content-center  m-0 pt-2"
+                      onClick={() => props.updateDefaultTable()}
+                    >
+                      <p className={Style.p}>-- Default --</p>
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="d-flex justify-content-center  m-0 pt-2"
+                      onClick={() => props.sortProductsOrder("price", "asc")}
+                    >
+                      <p className={Style.p}>Low - High</p>
+                      <FontAwesomeIcon
+                        icon={faArrowUp}
+                        className="pt-1"
+                        style={{ color: "7899FF" }}
+                      />
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="d-flex justify-content-center m-0 pb-2"
+                      onClick={() => props.sortProductsOrder("price", "desc")}
+                    >
+                      <p className={Style.p}>High - Low</p>
+                      <FontAwesomeIcon
+                        icon={faArrowDown}
+                        className="pt-1"
+                        style={{ color: "7899FF" }}
+                      />
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </th>
 
             <br />
 
-            <th style={{ backgroundColor: frenchGray }}>Description</th>
+            <th style={{ backgroundColor: frenchGray }}>
+              <Container className="pb-2 m-0 ">
+                <label className="text-nowrap">Description</label>
+              </Container>
+            </th>
             <br />
 
             <th style={{ backgroundColor: frenchGray }}>
               <div className={Style.filterContainer}>
                 <label className="text-nowrap">Category</label>
-                <FontAwesomeIcon
-                  className={Style.filterIcon}
-                  size="lg"
-                  icon={faFilter}
-                />
+                <Dropdown align="end">
+                  <Dropdown.Toggle variant="link" id="dropdown-basic">
+                    <FontAwesomeIcon
+                      className={Style.filterIcon}
+                      icon={faFilter}
+                      size="lg"
+                      style={{ color: "4470FE" }}
+                    />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="m-0 pt-2 pb-2">
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() => props.updateDefaultTable()}
+                    >
+                      -- Default --
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() => props.sortProductsCategory("Automotive")}
+                    >
+                      Automotive
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() =>
+                        props.sortProductsCategory("Beauty & Personal Care")
+                      }
+                    >
+                      Beauty & Personal Care
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() => props.sortProductsCategory("Electronics")}
+                    >
+                      Electronics
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() => props.sortProductsCategory("Fashion")}
+                    >
+                      Fashion
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() =>
+                        props.sortProductsCategory("Health & Fitness")
+                      }
+                    >
+                      Health & Fitness
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() =>
+                        props.sortProductsCategory("Home & Kitchen")
+                      }
+                    >
+                      Home & Kitchen
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() =>
+                        props.sortProductsCategory("Sports & Outdoors")
+                      }
+                    >
+                      Sports & Outdoors
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="m-0 pl-1"
+                      onClick={() => props.sortProductsCategory("Toys & Games")}
+                    >
+                      Toys & Games
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </th>
             <br />
 
             <th style={{ backgroundColor: frenchGray }}>
-              <label className="text-nowrap">Bar Code</label>
+              <Container className="pb-2 m-0 ">
+                <label className="text-nowrap">Bar Code</label>
+              </Container>
             </th>
             <br />
 
             <th style={{ backgroundColor: frenchGray }}>
               <div className={Style.filterContainer}>
-                <label className="text-nowrap">Stock Quality</label>
-                <FontAwesomeIcon
-                  className={Style.filterIcon}
-                  size="lg"
-                  icon={faFilter}
-                />
+                <label className="text-nowrap">Stock Quantity</label>
+                <Dropdown align="end">
+                  <Dropdown.Toggle variant="link" id="dropdown-basic">
+                    <FontAwesomeIcon
+                      className={Style.filterIcon}
+                      icon={faFilter}
+                      size="lg"
+                      style={{ color: "4470FE" }}
+                    />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="text-center m-0 p-0">
+                    <Dropdown.Item
+                      className="d-flex justify-content-center  m-0 pt-2"
+                      onClick={() => props.updateDefaultTable()}
+                    >
+                      <p className={Style.p}>-- Default --</p>
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="d-flex justify-content-center  m-0 pt-2"
+                      onClick={() =>
+                        props.sortProductsOrder("stock_quantity", "asc")
+                      }
+                    >
+                      <p className={Style.p}>Low - High</p>
+                      <FontAwesomeIcon
+                        icon={faArrowUp}
+                        className="pt-1"
+                        style={{ color: "7899FF" }}
+                      />
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="d-flex justify-content-center m-0 pb-2"
+                      onClick={() =>
+                        props.sortProductsOrder("stock_quantity", "desc")
+                      }
+                    >
+                      <p className={Style.p}>High - Low</p>
+                      <FontAwesomeIcon
+                        icon={faArrowDown}
+                        className="pt-1"
+                        style={{ color: "7899FF" }}
+                      />
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </th>
             <br />
 
             <th style={{ backgroundColor: frenchGray }}>
-              <label className="text-nowrap">Action</label>
+              <Container className="pb-2 m-0 ">
+                <label className="text-nowrap">Action</label>
+              </Container>
             </th>
           </tr>
         </thead>
@@ -136,6 +300,7 @@ export default function ViewTable(props) {
                 style={{ maxWidth: "150px" }}
                 className="text-truncate align-middle text-center"
               >
+                {pesoSign.peso}
                 {product.price}
               </td>
               <br />
@@ -149,7 +314,7 @@ export default function ViewTable(props) {
               <td className="text-truncate align-middle">{product.category}</td>
               <br />
               <td className="text-truncate align-bottom text-center">
-                {product.bar_code}
+                <BarcodeGenerator data={product.bar_code} />
               </td>
               <br />
               <td

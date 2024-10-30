@@ -1,8 +1,14 @@
+//react
 import React, { useState, useEffect } from "react";
+//react dom
 import { Link, useNavigate, useParams } from "react-router-dom";
+//bootstrap
 import { Form, Button, Container } from "react-bootstrap";
-import ViewProductPage from "./ViewProductPage.jsx";
+//css style
 import Style from "../css modules/editproduct.module.css";
+//fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditProductPage() {
   const navigate = useNavigate();
@@ -19,8 +25,6 @@ export default function EditProductPage() {
       .then((data) => setFormData(data))
       .catch((error) => console.error("Error fetching data", error));
   }, []);
-
-  console.log("Form data: ", formData);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -59,7 +63,12 @@ export default function EditProductPage() {
   return (
     <Container fluid className="pt-5 m-0">
       <div className={Style.editProductContainer}>
-        <h2>Add New Product</h2>
+        <Container className="d-flex justify-content-between">
+          <h2>Edit Product Details</h2>
+          <Link to="/viewProductPage">
+            <FontAwesomeIcon className="pt-2" icon={faChevronLeft} size="2xl" />
+          </Link>
+        </Container>
         <Form clasName={Style.form} onSubmit={handleSubmit}>
           <Form.Group controlId="formProductName">
             <Form.Label>Product Name</Form.Label>

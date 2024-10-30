@@ -10,11 +10,26 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = ProductList::all();
+
+        $products = ProductList::query();
+        if ($request->has('sort')) {
+            $column_name = $request->input('sort');
+            $order = $request->input('order', 'asc'); //default
+            $products = $products->orderBy($column_name, $order);
+            $products = $products->get();
+        } else if ($request->has('category')) {
+            $category_name = $request->input('category');
+            $products = $products->where('category', $category_name);
+            $products = $products->get();
+        } else {
+            $products = ProductList::all();
+        }
+
         return response()->json($products);
     }
+
 
     /**
      * Show the form for creating a new resource.

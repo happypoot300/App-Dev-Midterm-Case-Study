@@ -54,7 +54,7 @@ header {
 }
 
 .iconBorder {
-  padding: 8px 3px 10px 13px;
+  padding: 10px 3px 10px 13px;
   border: 2px solid var(--neonBlue);
   border-radius: 100%;
 }
@@ -90,8 +90,21 @@ header {
 h2 {
   height: 100%;
   width: fit-content;
+  font-weight: bold;
   line-height: 50px;
   margin: 0px 0px 0px 40px;
+}
+
+.p {
+  color: #4470fe;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0;
+  padding: 10px;
+}
+.p:hover {
+  cursor: pointer;
+  color: #ec4547;
 }
 
 /*buttons*/

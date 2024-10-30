@@ -1,10 +1,16 @@
+//react
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+//react dom
+import { useNavigate, Link } from "react-router-dom";
+//bootstrap
 import Button from "../components/Button.jsx";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
+//css style
 import Style from "../css modules/addproduct.module.css";
-import ViewProductPage from "./ViewProductPage.jsx";
+//fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function AddProductPage() {
   const navigate = useNavigate();
@@ -25,8 +31,8 @@ export default function AddProductPage() {
   }
 
   function handleSubmit(event) {
-    event.preventDefault(); // Prevent the default form submission
-    console.log(formData); // Post the data to the API
+    event.preventDefault();
+    console.log(formData);
 
     fetch("http://127.0.0.1:8000/api/products", {
       method: "POST",
@@ -36,8 +42,8 @@ export default function AddProductPage() {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        console.log("Response:", response); // log the response
-        return response.json(); // parse the response as JSON
+        console.log("Response:", response);
+        return response.json();
       })
       .then((data) => {
         console.log("Success:", data);
@@ -55,7 +61,13 @@ export default function AddProductPage() {
   return (
     <Container fluid className="pt-5 m-0">
       <div className={Style.addProductContainer}>
-        <h2>Add New Product</h2>
+        <Container className="d-flex justify-content-between">
+          <h2>Add New Product</h2>
+          <Link to="/viewProductPage">
+            <FontAwesomeIcon className="pt-2" icon={faChevronLeft} size="2xl" />
+          </Link>
+        </Container>
+
         <Form clasName={Style.form} onSubmit={handleSubmit}>
           <Form.Group controlId="formProductName">
             <Form.Label>Product Name</Form.Label>

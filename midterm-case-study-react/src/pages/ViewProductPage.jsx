@@ -1,3 +1,4 @@
+//react
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 //bootstrap
@@ -6,15 +7,14 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
 import Dropdown from "react-bootstrap/Dropdown";
-//components
-import Table from "../components/Table.jsx";
-import AddProductPage from "./AddProductPage.jsx";
-import EditProductPage from "./EditProductPage.jsx";
 //css style
 import Style from "../css modules/viewproductpage.module.css";
 //fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+//components
+import Table from "../components/Table.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function ViewProductPage() {
   const [addButton, setAddButton] = useState(false);
@@ -22,6 +22,7 @@ export default function ViewProductPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
+  const navigate = useNavigate();
   //gets all products
   const [products, setProducts] = useState([]);
 
@@ -44,11 +45,59 @@ export default function ViewProductPage() {
   }
 
   function handleSearchQuery() {
+    const searchQueryLower = searchQuery;
     const filteredProducts = products.filter((product) => {
-      const searchQueryLower = searchQuery.toLowerCase();
-      return product.product_name.toLowerCase().includes(searchQueryLower);
+      return (
+        product.product_name.includes(searchQueryLower) ||
+        product.price.toLowerCase().includes(searchQueryLower) ||
+        product.description.includes(searchQueryLower) ||
+        product.category.includes(searchQueryLower) ||
+        product.bar_code.includes(searchQueryLower) ||
+        product.stock_quantity
+          .toString()
+          .toLowerCase()
+          .includes(searchQueryLower)
+      );
     });
     setSearchResults(filteredProducts);
+  }
+
+  function updateDefaultTable() {
+    return fetch("http://127.0.0.1:8000/api/products")
+      .then((response) => response.json())
+      .then((products) => {
+        console.log(products);
+        setProducts(products);
+        setSearchResults([]);
+      })
+      .catch((error) => console.error("Error fetching data", error));
+  }
+
+  function sortProductsOrder(column_name, orderBy) {
+    console.log("sortProductOrder was called ");
+    fetch(
+      `http://127.0.0.1:8000/api/products?sort=${column_name}&order=${orderBy}`
+    )
+      .then((response) => response.json())
+      .then((products) => {
+        setProducts(products);
+        setSearchResults([]);
+      })
+      .catch((error) => console.error("Error fetching data", error));
+  }
+
+  function sortProductsCategory(category_name) {
+    fetch(`http://127.0.0.1:8000/api/products?category=${category_name}`)
+      .then((response) => response.json())
+      .then((products) => {
+        setProducts(products);
+        setSearchResults([]);
+      })
+      .catch((error) => console.error("Error fetching data", error));
+  }
+
+  function handleLogout() {
+    navigate("/", { replace: true });
   }
 
   return (
@@ -73,10 +122,12 @@ export default function ViewProductPage() {
               />
             </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-              <Link to="/" className="dropdown-item text-center">
-                Log Out
-              </Link>
+            <Dropdown.Menu className="m-0 p-0">
+              <Button
+                className="d-flex justify-content-center align-items-center dropdown-item  m-0 p-0"
+                name={"Log Out"}
+                onClick={handleLogout}
+              ></Button>
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -112,6 +163,9 @@ export default function ViewProductPage() {
             <Table
               products={searchResults.length > 0 ? searchResults : products}
               updateProductsList={updateProductsList}
+              updateDefaultTable={updateDefaultTable}
+              sortProductsOrder={sortProductsOrder}
+              sortProductsCategory={sortProductsCategory}
             />
           </div>
         </Container>
